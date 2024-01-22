@@ -25,9 +25,47 @@
                 case 'search':
                     $this->chercherUser($mot);
                     break;
+                case'login':
+                    if($_POST){ //if($_POST!=[]) ou if (!empty($_POST))
+                        $this->valider($_POST);
+                    }
+                    break;
+                    case 'logout':
+                        
             }
         }
         /*------------------Les Methods------------------------*/
+
+        function valider($data){
+            $um=new UserManager();
+            extract($data);
+            $connexion=$um->connexion();
+            $sql="select * from user where username=? and password=?";
+            $requete=$connexion->prepare($sql);
+            $requete->execute([$username,sha1($password)]);
+            $user =$requete->fetch(PDO::FETCH_ASSOC);
+            if($user){
+                $_SESSION['username']=$user['username'];
+                $_SESSION['roles']=$user['roles'];
+                $_SESSION['bg_navbar']="bg_green";
+                ///---REDIRECTION VERS L ACCEUIL
+
+                header('location::acceuil')
+                exit();
+            }else{
+                echo "<h1> Identifiant et ou mot de passe incorrect </h1>"
+                die;
+
+            }
+
+
+
+        }
+        function seConnecter(){
+            $file="View/user/formLogin.html.php";
+            $this->generatePage($file);
+
+        }
         function chercherUser($mot){
             $um=new UserManager();
             $columnLikes=['username'];

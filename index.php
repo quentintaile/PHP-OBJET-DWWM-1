@@ -1,4 +1,10 @@
 <?php
+    session_start();
+    if(!$_SESSION){ // La variable $_SESSION est encore vide === $_SESSION=[];
+        $SESSION['username']='user';
+        $SESSION['roles']='json_encode([ROLE_USER])';
+        $_SESSION['bg_navbar']='bg_red';
+    }
     require_once("Service/extra.php");
     spl_autoload_register('charger');  //  spl_autoload_register charge automatiquement la fonction indiqué en parametre. 
     $path='accueil';  // initialisation de la variable $path 
